@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Sicherheits-Zitat</title>
+  <style>
+
+  </style>
+  <link rel="STYLESHEET" href="./static/style.css">
+  <script>
+    (() => {
+  const path = window.location.pathname;
+  const forbiddenExts = [".js", ".min.js", ".png", ".css"];
+
+  if (forbiddenExts.some(ext => path.endsWith(ext))) {
+    console.warn("🛑 Direkter Zugriff auf .js-Datei blockiert:", path);
+    document.body.innerHTML = "<h1>🚫 Zugriff verweigert</h1>";
+    setTimeout(() => location.href = "/", 1500); // z. B. zurück zur Startseite
+  }
+})();
+
+  </script>
+</head>
+<body id="root">
+    <noscript>
+        <h2 style="color:red">Stop</h2>
+        <p>Aktiviere Javascript jetzt und für diese Webseite</p>
+        <meta http-equiv="refresh" content="1;http://google.com/"/>
+    </noscript>
+  <h1>📌 Sicherheits-Statement</h1>
+  <div id="quote-container"></div>
+
+  <script>
+    (async () => {
+  try {
+    const url = `./static/bg.jpg?id=${Date.now()}`;
+    const res = await fetch(url, { cache: 'no-store' });
+    if (!res.ok) throw new Error("Fehler beim Laden");
+
+    // Create blob URL (sicher)
+    const blob = await res.blob();
+    const imageUrl = URL.createObjectURL(blob);
+
+    document.getElementById('bg-box').style.background = `url('${imageUrl}') no-repeat center center / cover`;
+    console.log("[BG] ✅ Hintergrundbild geladen:", url);
+  } catch (err) {
+    console.warn("[BG] Fehler beim Laden des Hintergrunds:", err);
+  }
+})();
+</script>
+
+<script type="module" src="./static/register.min.js"></script>
+<script src="./static/connector.min.js"></script>
+
+<script>
+(async () => {
+  try {
+    const res = await fetch("./static/bg Image 13. Mai 2025, 21_01_19.png?id=" + Date.now(), { cache: "no-store" });
+    if (!res.ok) throw new Error("❌ background.png konnte nicht geladen werden.");
+
+    const blob = await res.blob();
+    const bgURL = URL.createObjectURL(blob);
+
+    document.body.style.backgroundImage = `url('${bgURL}')`;
+    console.log("[WAF] ✅ background.png geladen & gesetzt");
+  } catch (err) {
+    console.warn("[WAF] Fehler beim Hintergrundladen:", err);
+  }
+})();
+
+    async function createBlockquoteWithIP(text, author = '') {
+      const block = document.createElement('blockquote');
+      const domain = window.location.hostname;
+
+      // IP abrufen (öffentlich)
+      let ip = "Unbekannt";
+      try {
+        const res = await fetch("https://api.ipify.org?format=json");
+        const data = await res.json();
+        ip = data.ip;
+      } catch (err) {
+        ip = "IP konnte nicht geladen werden";
+      }
+
+      block.innerHTML = `
+        ${text}<br>
+        <cite>– ${author || "Anonym"}, ${domain} | IP: ${ip}</cite>
+      `;
+
+      document.getElementById('quote-container').appendChild(block);
+    }
+
+    // Beispiel verwenden
+    createBlockquoteWithIP("Diese Website ist gegen alle Leaks abgesichert.", "Bayram Usta");
+  </script>
+  <script src="./static/waf.min.js"></script>
+  <script src="./static/app.min.js"></script>
+</body>
+</html>
